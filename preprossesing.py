@@ -51,9 +51,3 @@ def test_validation_split(df):
     train, val = train_test_split(df, test_size=0.2)
     return train, val
 
-def remove_outliers(df):
-    from sklearn.ensemble import IsolationForest
-    clf = IsolationForest(random_state=0).fit(df)
-    outliers = clf.predict(df)
-    df = df[outliers == 1]
-    return df
