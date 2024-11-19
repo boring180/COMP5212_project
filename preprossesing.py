@@ -37,9 +37,7 @@ def standardize(df, scaler=None):
     
     df['year'] = scaler.fit_transform(df['year'].values.reshape(-1, 1))
     df['operating_hours'] = scaler.fit_transform(df['operating_hours'].values.reshape(-1, 1))
-    df['registration_fees'] = scaler.fit_transform(df['registration_fees'].values.reshape(-1, 1))
     df['efficiency'] = scaler.fit_transform(df['efficiency'].values.reshape(-1, 1))
-    df['engine_capacity'] = scaler.fit_transform(df['engine_capacity'].values.reshape(-1, 1))
 
     with open('scaler.pkl', 'wb') as f:
         pickle.dump(scaler, f)
