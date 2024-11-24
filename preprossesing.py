@@ -4,7 +4,7 @@ import pandas as pd
 
 df = pd.read_csv('data/train.csv')
 
-est = KBinsDiscretizer(n_bins=[12, 15], strategy='kmeans', subsample=None)
+est = KBinsDiscretizer(n_bins=[6, 8], strategy='kmeans', subsample=None)
 est.fit(df[['registration_fees', 'engine_capacity']])
 
 list_of_manufacturers = df['manufacturer'].unique()
@@ -22,6 +22,9 @@ enc.fit(df[['manufacturer', 'model', 'gearbox_type', 'fuel_type']])
 def encoder(df):
     
     discrete_feature = est.transform(df[['registration_fees', 'engine_capacity']]).toarray()
+    data_count = discrete_feature.sum(axis=0)
+    # print('Data counts:', data_count)
+    
     encoded_feature = enc.transform(df[['manufacturer', 'model', 'gearbox_type', 'fuel_type']])
     
     df.drop(['manufacturer', 'model', 'gearbox_type', 'fuel_type', 'registration_fees', 'engine_capacity'], axis=1, inplace=True)
@@ -29,6 +32,9 @@ def encoder(df):
     df = pd.concat([df, pd.DataFrame(discrete_feature)], axis=1) 
     
     return df
+
+# df = pd.read_csv('data/train.csv')
+# encoder(df)
 
 from sklearn.preprocessing import StandardScaler
 import pickle
