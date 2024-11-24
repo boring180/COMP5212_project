@@ -4,18 +4,20 @@ import pandas as pd
 
 df = pd.read_csv('data/train.csv')
 
-est = KBinsDiscretizer(n_bins=[12, 20], strategy='kmeans', subsample=None)
+est = KBinsDiscretizer(n_bins=[12, 15], strategy='kmeans', subsample=None)
 est.fit(df[['registration_fees', 'engine_capacity']])
 
 list_of_manufacturers = df['manufacturer'].unique()
+print('list_of_manufacturers shape:', list_of_manufacturers.shape)
 list_of_model = df['model'].unique()
+print('list_of_model shape:', list_of_model.shape)
 list_of_gearbox_type = df['gearbox_type'].unique()
+print('list_of_gearbox_type shape:', list_of_gearbox_type.shape)
 list_of_fuel_type = df['fuel_type'].unique()
+print('list_of_fuel_type shape:', list_of_fuel_type.shape)
 
 enc = OneHotEncoder(handle_unknown='ignore', categories=[list_of_manufacturers, list_of_model, list_of_gearbox_type, list_of_fuel_type])
 enc.fit(df[['manufacturer', 'model', 'gearbox_type', 'fuel_type']])
-
-
 
 def encoder(df):
     
@@ -46,6 +48,6 @@ def standardize(df, scaler=None):
 
 def test_validation_split(df):
     from sklearn.model_selection import train_test_split
-    train, val = train_test_split(df, test_size=0.2)
+    train, val = train_test_split(df, test_size=0.05)
     return train, val
 
