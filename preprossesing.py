@@ -7,8 +7,6 @@ df = pd.read_csv('data/train.csv')
 est = KBinsDiscretizer(n_bins=[6, 8], strategy='kmeans', subsample=None)
 est.fit(df[['registration_fees', 'engine_capacity']])
 
-list_of_manufacturers = df['manufacturer'].unique()
-print('list_of_manufacturers shape:', list_of_manufacturers.shape)
 list_of_model = df['model'].unique()
 print('list_of_model shape:', list_of_model.shape)
 list_of_gearbox_type = df['gearbox_type'].unique()
@@ -16,18 +14,19 @@ print('list_of_gearbox_type shape:', list_of_gearbox_type.shape)
 list_of_fuel_type = df['fuel_type'].unique()
 print('list_of_fuel_type shape:', list_of_fuel_type.shape)
 
-enc = OneHotEncoder(handle_unknown='ignore', categories=[list_of_manufacturers, list_of_model, list_of_gearbox_type, list_of_fuel_type])
-enc.fit(df[['manufacturer', 'model', 'gearbox_type', 'fuel_type']])
+enc = OneHotEncoder(handle_unknown='ignore', categories=[list_of_model, list_of_gearbox_type, list_of_fuel_type])
+enc.fit(df[['model', 'gearbox_type', 'fuel_type']])
 
 def encoder(df):
+    df = df.drop(['manufacturer'], axis=1)
     
     discrete_feature = est.transform(df[['registration_fees', 'engine_capacity']]).toarray()
-    data_count = discrete_feature.sum(axis=0)
+    # data_count = discrete_feature.sum(axis=0)
     # print('Data counts:', data_count)
     
-    encoded_feature = enc.transform(df[['manufacturer', 'model', 'gearbox_type', 'fuel_type']])
+    encoded_feature = enc.transform(df[['model', 'gearbox_type', 'fuel_type']])
     
-    df.drop(['manufacturer', 'model', 'gearbox_type', 'fuel_type', 'registration_fees', 'engine_capacity'], axis=1, inplace=True)
+    df.drop(['model', 'gearbox_type', 'fuel_type', 'registration_fees', 'engine_capacity'], axis=1, inplace=True)
     df = pd.concat([df, pd.DataFrame(encoded_feature.toarray())], axis=1)
     df = pd.concat([df, pd.DataFrame(discrete_feature)], axis=1) 
     
