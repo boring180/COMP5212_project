@@ -48,6 +48,6 @@ def standardize(df, scaler=None):
 
 def test_validation_split(df):
     from sklearn.model_selection import train_test_split
-    train, val = train_test_split(df, test_size=0.05)
+    train, val = train_test_split(df, test_size=0.1)
     return train, val
 
