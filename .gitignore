@@ -2,3 +2,5 @@
 *.csv
 *.pth
 *.pkl
+*.pyc
+*.pyc
