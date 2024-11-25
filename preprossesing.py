@@ -4,7 +4,7 @@ import pandas as pd
 
 df = pd.read_csv('data/train.csv')
 
-est = KBinsDiscretizer(n_bins=[6, 8], strategy='kmeans', subsample=None)
+est = KBinsDiscretizer(n_bins=[8, 10], strategy='kmeans', subsample=None)
 est.fit(df[['registration_fees', 'engine_capacity']])
 
 list_of_model = df['model'].unique()
