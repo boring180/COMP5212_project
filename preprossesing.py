@@ -20,39 +20,38 @@ enc.fit(df[['model', 'gearbox_type', 'fuel_type']])
 def encoder(df):
     df = df.drop(['manufacturer'], axis=1)
     
-    discrete_feature = est.transform(df[['registration_fees', 'engine_capacity']]).toarray()
+    # discrete_feature = est.transform(df[['registration_fees', 'engine_capacity']]).toarray()
     # data_count = discrete_feature.sum(axis=0)
     # print('Data counts:', data_count)
     
     encoded_feature = enc.transform(df[['model', 'gearbox_type', 'fuel_type']])
     
-    df.drop(['model', 'gearbox_type', 'fuel_type', 'registration_fees', 'engine_capacity'], axis=1, inplace=True)
+    df.drop(['model', 'gearbox_type', 'fuel_type'], axis=1, inplace=True)
     df = pd.concat([df, pd.DataFrame(encoded_feature.toarray())], axis=1)
-    df = pd.concat([df, pd.DataFrame(discrete_feature)], axis=1) 
+
+    # df.drop(['model', 'gearbox_type', 'fuel_type', 'registration_fees', 'engine_capacity'], axis=1, inplace=True)
+    # df = pd.concat([df, pd.DataFrame(discrete_feature)], axis=1) 
     
     return df
-
-# df = pd.read_csv('data/train.csv')
-# encoder(df)
 
 from sklearn.preprocessing import StandardScaler
 import pickle
 
-def standardize(df, scaler=None):
+def standardize(df1, df2=None, scaler=None):
     if scaler is None:
         scaler = StandardScaler()
+        scaler.fit(df1[['year', 'operating_hours', 'efficiency', 'registration_fees', 'engine_capacity']])
+        # scaler.fit(df['year', 'operating_hours', 'efficiency'])
     
-    df['year'] = scaler.fit_transform(df['year'].values.reshape(-1, 1))
-    df['operating_hours'] = scaler.fit_transform(df['operating_hours'].values.reshape(-1, 1))
-    df['efficiency'] = scaler.fit_transform(df['efficiency'].values.reshape(-1, 1))
-
+    # df['year', 'operating_hours', 'efficiency'] = scaler.transform(df['year', 'operating_hours', 'efficiency'])
+    df1[['year', 'operating_hours', 'efficiency', 'registration_fees', 'engine_capacity']] = scaler.transform(df1[['year', 'operating_hours', 'efficiency', 'registration_fees', 'engine_capacity']])
+    if df2 is not None:
+        df2[['year', 'operating_hours', 'efficiency', 'registration_fees', 'engine_capacity']] = scaler.transform(df2[['year', 'operating_hours', 'efficiency', 'registration_fees', 'engine_capacity']])
+    
     with open('scaler.pkl', 'wb') as f:
         pickle.dump(scaler, f)
         
-    return df
+    return df1, df2
 
-def test_validation_split(df):
-    from sklearn.model_selection import train_test_split
-    train, val = train_test_split(df, test_size=0.1)
-    return train, val
-
+# df = pd.read_csv('data/train.csv')
+# standardize(df)
