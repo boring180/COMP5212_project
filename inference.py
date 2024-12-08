@@ -61,7 +61,7 @@ class mlp(nn.Module):
         
         return self.layers(x)
     
-df = pd.read_csv('data/org_test.csv')
+df = pd.read_csv('data/test.csv')
 model = torch.load('mlp_model.pth', weights_only=False)
 model.eval()
 index = df['id']
@@ -75,4 +75,4 @@ y_pred = model(X)[:, 0]
 df = pd.DataFrame(y_pred.detach().numpy(), columns=['price'])
 df = pd.concat([index, df], axis=1)
 df.rename(columns={'price': 'answer'}, inplace=True)
-df.to_csv('output.csv', index=False)
+df.to_csv('submission.csv', index=False)

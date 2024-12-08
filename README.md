@@ -73,9 +73,9 @@ The model is trained for 5000 epochs, and an early stopping mechanism is used to
 
 ### Evaluation
 
-The model converges with a validation loss of 0.0001. The model is evaluated using the public test data, and the RMSE is calculated to be 0.0001.
+The model converges with a validation loss of 2120. The model is evaluated using the public test data, and the RMSE is calculated to be 2507.
 
-For testing with the outliers, the model is evaluated using the training data with outliers, and the RMSE is calculated to be 0.0001.
+For testing with the outliers, the model is evaluated using the training data with outliers, and the RMSE is calculated to be 2274.
 
 ![loss](photos/loss.png)
 
